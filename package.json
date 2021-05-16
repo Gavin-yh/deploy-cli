@@ -1,10 +1,10 @@
 {
   "name": "deploy-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "gavin",
   "description": "",
   "bin": {
-    "deploy": "bin"
+    "deploy": "bin/index"
   },
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "keywords": [],
   "license": "ISC",
   "devDependencies": {
+    "chalk": "^4.1.1",
     "chokidar": "^3.5.1",
     "shelljs": "^0.8.4"
   }

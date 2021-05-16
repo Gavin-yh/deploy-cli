@@ -1,0 +1,60 @@
+#! /usr/bin/env node
+
+const shell = require('shelljs')
+const path = require('path')
+const chokidar = require('chokidar')
+const fs = require('fs')
+const root = process.cwd()
+const chalk = require('chalk')
+
+const configPath = `${root}/deploy.config.js`
+
+if(!fs.existsSync(configPath)) {
+    console.log(chalk.red('请提供配置文件: deploy.config.js') )
+    return
+}
+
+const config = require(`${root}/deploy.config.js`)
+
+if (!config.host) {
+    console.log(chalk.red('提供host配置，配置服务器地址') )
+    return
+}
+
+if(!config.password) {
+    console.log(chalk.red('提供服务器密码'))
+    return
+}
+
+let filePath = './'
+let to = `${config.host}:/`
+const wFilePath = config.filePath
+const wDirPath = config.dirPath
+
+//提供文件目录，拷贝文件目录；提供文件，就拷贝文件；默认拷贝根目录
+const remotePath = wDirPath || wFilePath || filePath
+
+let command = `scp -r ${remotePath} ${to}`
+
+if(wFilePath) {
+    command = `scp ${remotePath} ${to}`
+}
+
+if(config.watch) {
+    const watcher = chokidar.watch(remotePath, {
+        ignored: './deploy.config.js' ,
+    })
+
+    watcher
+        .on('change', path => {
+            console.log(`copy ${remotePath} to ${to}, change target: ${path}`)
+            shell.exec(command)
+        })
+        .on('error', error => console.log(`Watcher error: ${error}`))
+}
+
+shell.exec(command)
+
+
+
+
