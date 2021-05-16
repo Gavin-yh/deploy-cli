@@ -1,6 +1,6 @@
 {
-  "name": "deploy-cli",
-  "version": "1.0.1",
+  "name": "gdeploy-cli",
+  "version": "1.0.2",
   "author": "gavin",
   "description": "",
   "bin": {

@@ -27,27 +27,27 @@ if(!config.password) {
 }
 
 let filePath = './'
-let to = `${config.host}:/`
+let remotePath = `${config.host}:/`
 const wFilePath = config.filePath
 const wDirPath = config.dirPath
 
 //提供文件目录，拷贝文件目录；提供文件，就拷贝文件；默认拷贝根目录
-const remotePath = wDirPath || wFilePath || filePath
+const localPath = wDirPath || wFilePath || filePath
 
-let command = `scp -r ${remotePath} ${to}`
+let command = `scp -r ${localPath} ${remotePath}`
 
 if(wFilePath) {
-    command = `scp ${remotePath} ${to}`
+    command = `scp ${localPath} ${remotePath}`
 }
 
 if(config.watch) {
-    const watcher = chokidar.watch(remotePath, {
+    const watcher = chokidar.watch(localPath, {
         ignored: './deploy.config.js' ,
     })
 
     watcher
         .on('change', path => {
-            console.log(`copy ${remotePath} to ${to}, change target: ${path}`)
+            console.log(`copy ${localPath} to ${remotePath}, change target: ${path}`)
             shell.exec(command)
         })
         .on('error', error => console.log(`Watcher error: ${error}`))
