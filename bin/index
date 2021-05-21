@@ -51,10 +51,9 @@ if(config.watch) {
             shell.exec(command)
         })
         .on('error', error => console.log(`Watcher error: ${error}`))
+} else {
+    shell.exec(command)
 }
-
-shell.exec(command)
-
 
 
 
